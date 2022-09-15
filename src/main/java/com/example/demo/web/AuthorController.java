@@ -16,6 +16,13 @@ class AuthorController {
 
     public String errorMessage = "The author you requested doesn't exist. Please review your parameters!";
 
+    private Object errorChecking(String authorId) {
+        if(authorMap.get(authorId) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, this.errorMessage);
+        }
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, this.errorMessage);
+    }
+
     @PostMapping(consumes = {"application/json"},
             produces = {"application/json"})
     Author addAuthor(@RequestBody Author author) {
@@ -29,9 +36,7 @@ class AuthorController {
     @GetMapping(value = {"/{authorId}"},
             produces = {"application/json"})
     Author author(@PathVariable String authorId){
-        if(authorMap.get(authorId) == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, this.errorMessage);
-        }
+        errorChecking(authorId);
         Author getAuthor = authorMap.get(authorId);
         return getAuthor;
     }
@@ -40,6 +45,7 @@ class AuthorController {
     @DeleteMapping(value = {"/{authorId}"},
             consumes = {"application/json"})
     void removeAuthor(@PathVariable String authorId){
+        errorChecking(authorId);
         authorMap.remove(authorId);
     }
 
@@ -48,8 +54,7 @@ class AuthorController {
             consumes = {"application/json"},
             produces = {"application/json"})
     Author updateAuthor(@PathVariable String authorId, @RequestBody Author authorFromUser){
-        if(authorMap.get(authorId) == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, this.errorMessage);}
+        errorChecking(authorId);
         authorFromUser.setId(authorId);
         authorMap.replace(authorId, authorFromUser);
         return authorFromUser;
