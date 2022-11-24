@@ -39,6 +39,9 @@ class AuthorController {
         if (from > to) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "parameter from must be greater than to");
         }
+        if (Math.abs(from - to) > 1000) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "result can  contains maximum 1000 elements");
+        }
         return authorService.getAll(authorName, from, to);
     }
 
