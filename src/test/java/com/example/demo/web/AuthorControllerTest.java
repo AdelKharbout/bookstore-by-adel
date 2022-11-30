@@ -58,7 +58,7 @@ class AuthorControllerTest {
         assertThat(controller.getAllAuthors("", 1, 5))
                 .hasSize(1);
     }
-    // pagination
+
     @ParameterizedTest
     @CsvSource({
             "-1, 0",
@@ -71,6 +71,7 @@ class AuthorControllerTest {
                 .hasMessage("400 BAD_REQUEST \"parameters from and to must be greater than 0\"");
         verifyNoMoreInteractions(authorService);
     }
+
     // pagination
     @ParameterizedTest
     @CsvSource({
